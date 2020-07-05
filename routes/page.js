@@ -1,15 +1,16 @@
 const express = require('express');
+const {isLoggedIn,isNotLoggedIn} = require('./middleware');
 
 const router = express.Router();
 
-router.get('/profile',(req,res)=>{
-    res.render('profile',{title:'내 정보 - NodeTweet',user:null});
+router.get('/profile',isLoggedIn,(req,res)=>{
+    res.render('profile',{title:'내 정보 - NodeTweet',user:req.user});
 });
 
-router.get('/join',(req,res)=>{
+router.get('/join',isNotLoggedIn,(req,res)=>{
     res.render('join',{
         title:'회원가입 - NodeTweet',
-        user:null,
+        user:req.user,
         joinError:req.flash('joinError'),
     });
 });
@@ -18,7 +19,7 @@ router.get('/',(req,res,next)=>{
     res.render('main',{
         title:'NodeTweet',
         twits:[],
-        user:null,
+        user:req.user,
         loginError:req.flash('loginError'),
     });
 });
