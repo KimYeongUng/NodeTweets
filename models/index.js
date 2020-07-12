@@ -3,15 +3,15 @@ const env = process.env.NODE_ENV || 'development';
 const config = require('../config/config')[env];
 const db = {};
 
-const sequelie = new Sequelize(
+const sequelize = new Sequelize(
     config.database,config.username,config.password,config,
 );
 
-db.sequelize = sequelie;
+db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-db.User = require('./user')(sequelie,Sequelize);
-db.Post = require('./post')(sequelie,Sequelize);
-db.HashTag = require('./hashtag')(sequelie,Sequelize);
+db.User = require('./user')(sequelize,Sequelize);
+db.Post = require('./post')(sequelize,Sequelize);
+db.HashTag = require('./hashtag')(sequelize,Sequelize);
 
 db.User.hasMany(db.Post);
 db.Post.belongsTo(db.User);
@@ -20,12 +20,12 @@ db.HashTag.belongsToMany(db.Post,{through:'PostHashtag'});
 
 db.User.belongsToMany(db.User,{
    foreignKey:'followingId',
-   as:'Follwers',
+   as:'Followers',
    through:'Follow',
 });
 
 db.User.belongsToMany(db.User,{
-    foreignKey:'follwerId',
+    foreignKey:'followerId',
     as:'Followings',
     through:'Follow',
 });

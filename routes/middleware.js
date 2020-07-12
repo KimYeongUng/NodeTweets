@@ -1,13 +1,15 @@
 exports.isLoggedIn = (req,res,next)=>{
-  if(req.isAuthenticated)
+  if(req.isAuthenticated())
       next();
-  else
+  else {
       res.status(403).send('Need Sign in');
+  }
 };
 
 exports.isNotLoggedIn = (req,res,next)=>{
-    if(!req.isAuthenticated)
+    if(!req.isAuthenticated())
         next();
-    else
+    else {
         res.redirect('/');
-}
+    }
+};

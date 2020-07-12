@@ -8,7 +8,7 @@ html, body { margin: 0; padding: 0; height: 100%; }
     border-radius: 4px;
     background: white;
     border: 1px solid silver;
-    color: darkorange;
+    color: forestgreen;
     height: 37px;
     line-height: 37px;
     vertical-align: top;
@@ -101,7 +101,7 @@ input[type='text'], input[type='email'], input[type='password'], textarea {
 }
 .twit-img { text-align: center; }
 .twit-img img { max-width: 75%; }
-.error-message { color: red; font-weight: bold; }
+.error-message { color: forestgreen; font-weight: bold; }
 #search-form { text-align: right; }
 #join-form { padding: 10px; text-align: center; }
 #hashtag-form { text-align: right; }

@@ -9,10 +9,10 @@ const router = express.Router();
 router.post('/join',isNotLoggedIn,async (req,res,next)=>{
     const{email,nick,password} = req.body;
     try{
-        const exUser = await User.find({where:{email}});
+        const exUser = await User.findOne({where:{email}});
         if(exUser) {
             req.flash('joinError', 'This email has already been subscribed');
-            return res.redirect('./join');
+            return res.redirect('/join');
         }
         const hash = await bcrypt.hash(password,12);
         await User.create({
@@ -30,32 +30,37 @@ router.post('/join',isNotLoggedIn,async (req,res,next)=>{
 
 router.post('/login',isNotLoggedIn,(req,res,next)=>{
     passport.authenticate('local',(authError,user,info)=>{
-       if(authError){
-           console.log(authError);
-           return next(authError);
-       }
-       if(!User){
-           req.flash('loginEror',info.message);
-           return res.redirect('/');
-       }
-       return req.login(user,(loginError)=>{
-           if(loginError){
-               console.log(loginError);
-               return next(loginError);
-           }
-           return res.redirect('/');
-       });
+        if(authError){
+            console.error(authError);
+            return next(authError);
+        }
+        if(!user){
+            req.flash('loginError',info.message);
+            return res.redirect('/');
+        }
+        return req.login(user,(loginError)=>{
+            if(loginError){
+                console.error(loginError);
+                return next(loginError);
+            }
+            return res.redirect('/');
+        });
     })(req,res,next);
 });
+
 router.get('/logout',isLoggedIn,(req,res)=>{
+    console.log("logout");
     req.logout();
     req.session.destroy();
     res.redirect('/');
 });
 
-router.get('/kakao',passport.authenticate('kakao',{
+router.get('/kakao',passport.authenticate('kakao'));
+
+router.get('/kakao/callback',passport.authenticate('kakao',{
     failureRedirect:'/',
 }),(req,res)=>{
     res.redirect('/');
 });
+
 module.exports = router;

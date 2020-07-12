@@ -5,13 +5,13 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const flash = require('connect-flash');
 const session = require('express-session');
-const passport = require('passport');
+const passport = require(`passport`);
 require('dotenv').config();
 
 const pageRouter = require('./routes/page');
 const authRouter = require('./routes/auth');
-const {sequelize} = require('./models');
 const passportConfig = require('./passport');
+const {sequelize} = require('./models');
 
 const app = express();
 sequelize.sync();
@@ -28,14 +28,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-  resave:false,
   saveUninitialized:false,
   secret:process.env.COOKIE_SECRET,
+  resave:false,
   cookie:{
     httpOnly:true,
     secure:false,
   },
 }));
+
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
